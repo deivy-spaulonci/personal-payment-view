@@ -1,11 +1,15 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import 'v3-easyui/dist/themes/metro-gray/easyui.css';
-import 'v3-easyui/dist/themes/icon.css';
-import 'v3-easyui/dist/themes/vue.css';
+import Panel from 'primevue/panel';
 
-import './assets/main.css'
+import 'primevue/resources/themes/saga-blue/theme.css'       //theme
+import 'primevue/resources/primevue.min.css'                //core css
+import 'primeicons/primeicons.css'                        //icons
 
-import EasyUI from 'v3-easyui';
+// import './assets/main.css'
 
-createApp(App).use(EasyUI).mount('#app')
+import PrimeVue from 'primevue/config';
+
+const app = createApp(App);
+app.use(PrimeVue).mount('#app')
+app.component('Panel', Panel);
