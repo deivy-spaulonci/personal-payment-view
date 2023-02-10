@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import 'v3-easyui/dist/themes/material/easyui.css';
+import 'v3-easyui/dist/themes/metro-gray/easyui.css';
 import 'v3-easyui/dist/themes/icon.css';
 import 'v3-easyui/dist/themes/vue.css';
 

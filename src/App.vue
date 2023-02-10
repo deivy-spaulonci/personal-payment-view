@@ -1,12 +1,15 @@
 <script>
 import Home from './components/Home.vue'
-import About from './components/About.vue'
+import MainMenu from "./components/MainMenu.vue";
+import Despesa from "./components/despesa/Despesa.vue";
 
 const routes = {
   '/': Home,
-  '/about': About
+  '/despesa': Despesa,
+
 }
 export default {
+  components: {MainMenu},
   data() {
     return {
       currentPath: window.location.hash
@@ -26,14 +29,6 @@ export default {
 </script>
 
 <template>
-  <a href="#/">Home</a> |
-  <a href="#/about">About</a>
+  <main-menu></main-menu>
   <component :is="currentView" />
-
-  <div>
-    <h2>Basic Panel</h2>
-    <Panel title="Panel Title" :collapsible="true" :bodyStyle="{padding:'20px'}" style="height:200px">
-      <p>Panel Content.</p>
-    </Panel>
-  </div>
 </template>
