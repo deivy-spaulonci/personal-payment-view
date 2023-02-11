@@ -1,26 +1,22 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <TabMenu :model="items" />
+  <router-view/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data() {
+    return {
+      items: [
+        {label: 'Home', icon: 'pi pi-fw pi-home', to:'/'},
+        {label: 'Despesa', icon: 'pi pi-fw pi-dollar', to:'/despesa'},
+        {label: 'Fornecedor', icon: 'pi pi-fw pi-box'},
+        {label: 'Contas', icon: 'pi pi-fw pi-credit-card'},
+      ]
+    }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
