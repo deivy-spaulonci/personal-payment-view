@@ -2,8 +2,17 @@
   <Panel header="Despesas">
 
     <Fieldset legend="Dados Cadastrais" :toggleable="true">
+
       <Dropdown :options="tipos" optionLabel="nome" placeholder="Despesas"
                 style="width: 180px;" :filter="true" :show-clear="true"/>
+      <InputMask v-model="value" mask="99/99/9999" />
+      <Dropdown :options="fornecedores" optionLabel="nome" placeholder="Fornecedores"
+                style="width: 180px;" :filter="true" :show-clear="true"/>
+      <Dropdown :options="formasPgto" optionLabel="nome" placeholder="Forma Pagamento"
+                style="width: 180px;" :filter="true" :show-clear="true"/>
+
+      <InputText type="text" v-model="value" />
+
     </Fieldset>
 
 

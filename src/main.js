@@ -14,6 +14,7 @@ import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
 import InputNumber from 'primevue/inputnumber';
 import Fieldset from 'primevue/fieldset';
+import InputMask from 'primevue/inputmask';
 
 
 import 'primevue/resources/themes/nano/theme.css';
@@ -39,5 +40,6 @@ app.component('Dropdown', Dropdown);
 app.component('Calendar', Calendar);
 app.component('InputNumber', InputNumber);
 app.component('Fieldset', Fieldset);
+app.component('InputMask', InputMask);
 
 app.mount('#app')

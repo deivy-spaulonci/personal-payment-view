@@ -19,7 +19,7 @@ export default {
             filters: null,
             rows: 20,
             data: [],
-            valorTotal: 0,
+            valorTotal: 0
         }
     },
     defaultService: null,
