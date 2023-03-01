@@ -1,20 +1,22 @@
 <template>
   <Panel header="Despesas">
-
-    <Fieldset legend="Dados Cadastrais" :toggleable="true">
-
-      <Dropdown :options="tipos" optionLabel="nome" placeholder="Despesas"
-                style="width: 180px;" :filter="true" :show-clear="true"/>
-      <InputMask v-model="value" mask="99/99/9999" />
-      <Dropdown :options="fornecedores" optionLabel="nome" placeholder="Fornecedores"
-                style="width: 180px;" :filter="true" :show-clear="true"/>
-      <Dropdown :options="formasPgto" optionLabel="nome" placeholder="Forma Pagamento"
-                style="width: 180px;" :filter="true" :show-clear="true"/>
-
-      <InputText type="text" v-model="value" />
-
-    </Fieldset>
-
+    <Panel header="Cadastro" v-focustrap>
+      <div class="grid">
+        <ComboTipo @custom-change="(s) => despesaCadastro.tipoDespesa = s" :valores="tipos" :largura="210" place="Despesa"/>
+        <CampoData @custom-change="(s) => despesaCadastro.data = s" place="Data"/>
+        <ComboTipo @custom-change="(s) => despesaCadastro.forenecedor = s" :valores="fornecedores" :largura="250" place="Fornecedor"/>
+        <ComboTipo @custom-change="(s) => despesaCadastro.formaPagamento = s" :valores="formasPgto" :largura="250" place="Forma Pgto"/>
+        <CampoMoeda @custom-change="(s) => despesaCadastro.valor = s"/>
+        <div class="col-fixed" style="width:200px">
+          <InputText type="text" v-model="despesaCadastro.obs" placeholder="Observação" style="width: 100%;"/>
+        </div>
+        <div class="col-fixed" style="width:50px;" >
+          <Button type="button" icon="pi pi-save" class="p-button-primary p-button-sm" style="height: 100%; width: 100%;"
+                  @click="cadastroDespesa">
+          </Button>
+        </div>
+      </div>
+    </Panel>
 
     <div class="grid" style="margin-top: 20px;">
       <div class="col-fixed" style="width:70px">
@@ -48,46 +50,101 @@
 
 
     <DataTable :value="data" :loading="loading" dataKey="id" @sort="onSort($event)" responsiveLayout="scroll" stripedRows
-               selectionMode="single" v-model:selection="selectedDespesa">
+               selectionMode="single" v-model:selection="selectedDespesa"  editMode="row" @row-edit-save="onRowEditSave"
+               v-model:editingRows="editingRows">
       <template #empty>No customers found.</template>
       <template #loading>Loading despesas data. Please wait.</template>
-      <Column field="id" header="Id" :sortable="true" class="columnId" ></Column>
-      <Column field="tipoDespesa" header="Despesa" :sortable="true">
+
+
+      <Column field="id" header="Id" :sortable="true" class="columnId">
+        <template #editor="{ data, field }">
+          <InputText v-model="data[field]" style="width: 100%;"/>
+        </template>
+      </Column>
+
+      <Column field="tipoDespesa" header="Despesa" :sortable="true" style="width: 170px;">
+        <template #editor="{ data, field }">
+          <Dropdown v-model="data[field]" :options="tipos" optionLabel="nome" style="width: 100%;" :filter="true">
+            <template #option="slotProps">
+              <span>{{slotProps.option.nome}}</span>
+            </template>
+          </Dropdown>
+        </template>
+
         <template #body="slotProps" >
           <div>{{slotProps.data.tipoDespesa.nome}}</div>
         </template>
       </Column>
-      <Column field="data" header="Data" :sortable="true">
+
+      <Column field="data" header="Data" :sortable="true" style="width: 130px;">
+        <template #editor="{ data, field }">
+          <Calendar v-model="data[field]"  dateFormat="dd/mm/yy" :showButtonBar="true" />
+        </template>
         <template #body="slotProps" >
-          <div class="textRight">{{util.formatDateBr(slotProps.data.data)}}</div>
+          <div class="textCenter">{{util.formatDateBr(slotProps.data.data)}}</div>
         </template>
       </Column>
-      <Column field="fornecedor.nome" header="Fornecedor" :sortable="true"></Column>
+
+      <Column field="fornecedor" header="Fornecedor" :sortable="true">
+        <template #editor="{ data, field }">
+          <Dropdown v-model="data[field]" :options="fornecedores" optionLabel="nome" style="width: 100%;" :filter="true">
+            <template #option="slotProps">
+              <span>{{slotProps.option.nome}}</span>
+            </template>
+          </Dropdown>
+        </template>
+
+        <template #body="slotProps" >
+          <div>{{slotProps.data.fornecedor.nome}}</div>
+        </template>
+      </Column>
+
       <Column field="formaPagamento" header="Pagamento" :sortable="true">
+        <template #editor="{ data, field }">
+          <Dropdown v-model="data[field]" :options="formasPgto" optionLabel="nome" style="width: 100%;" :filter="true">
+            <template #option="slotProps">
+              <span>{{slotProps.option.nome}}</span>
+            </template>
+          </Dropdown>
+        </template>
+
         <template #body="slotProps" >
           <div>{{slotProps.data.formaPagamento.nome}}</div>
         </template>
       </Column>
+
       <Column field="valor" header="Valor" class="columnCurrency">
+        <template #editor="{ data, field }">
+<!--          <CampoMoeda @custom-change="(s) => despesaCadastro.valor = s"/>-->
+        </template>
+
         <template #body="slotProps" >
           <div class="textRight">{{util.formatCurrencyBR(slotProps.data.valor)}}</div>
         </template>
       </Column>
-      <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
-        <template #body>
-          <Button type="button" icon="pi pi-pencil" class="p-button-success p-button-sm"></Button>
-        </template>
-      </Column>
-      <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
-        <template #body>
-          <Button type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"></Button>
-        </template>
-      </Column>
+
+      <Column :rowEditor="true" :styles="{width:'10%', 'min-width':'8rem'}" :bodyStyle="{'text-align':'center'}"></Column>
+
+<!--      <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">-->
+<!--        <template #body>-->
+<!--          <Button type="button" icon="pi pi-pencil" class="p-button-success p-button-sm"></Button>-->
+<!--        </template>-->
+<!--      </Column>-->
+<!--      <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">-->
+<!--        <template #body>-->
+<!--          <Button type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"></Button>-->
+<!--        </template>-->
+<!--      </Column>-->
+
+
       <template #footer>
         <div class="textRight">Total: {{util.formatCurrencyBR(valorTotal)}}</div>
       </template>
+
+
+
     </DataTable>
-    <Paginator :rows="rows" :totalRecords="totalLinas" @page="onPage($event)" :rowsPerPageOptions="[20,30,40]">
+    <Paginator :rows="rows" :totalRecords="totalLinas" @page="onPage($event)" :rowsPerPageOptions="[10,15,20]">
     </Paginator>
   </Panel>
 
@@ -95,8 +152,12 @@
 
 <script>
 import despesaMixin from "@/views/despesa/mixin/despesaMixin";
+import ComboTipo from "@/components/ComboTipo.vue";
+import CampoData from "@/components/CampoData.vue";
+import CampoMoeda from "@/components/CampoMoeda.vue";
 
 export default {
+  components: {ComboTipo, CampoData, CampoMoeda},
   mixins: [despesaMixin]
 }
 </script>

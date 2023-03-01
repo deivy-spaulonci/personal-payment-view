@@ -1,0 +1,32 @@
+<template>
+  <div class="col-fixed" style="width:130px;">
+    <InputText v-model="selected"
+               style="width: 100%"
+               placeholder="Valor"
+               @keyup="handleChange"/>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      selected: null,
+    }
+  },
+  methods: {
+    handleChange (event) {
+      var v = event.target.value.replace(/\D/g,'');
+      v = (v/100).toFixed(2) + '';
+      v = v.replace(".", ",");
+      v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+      this.selected = v;
+      this.$emit("customChange",v)
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

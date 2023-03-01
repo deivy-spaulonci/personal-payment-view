@@ -3,6 +3,7 @@ import Util from "@/util/Util";
 export default {
     data() {
         return {
+            editingRows: [],
             idFilter: null,
             dataInicial:null,
             dataFinal:null,
@@ -17,9 +18,18 @@ export default {
             lazyParams: {},
             totalLinas: 0,
             filters: null,
-            rows: 20,
+            rows: 10,
             data: [],
-            valorTotal: 0
+            valorTotal: 0,
+            despesaCadastro: {
+                id:null,
+                tipoDespesa: null,
+                data:null,
+                forenecedor: null,
+                formaPagamento:null,
+                valor:null,
+                obs:null
+            }
         }
     },
     defaultService: null,
@@ -78,6 +88,15 @@ export default {
             this.idFilter = event.value;
             this.getDataDespesa();
         },
+        cadastroDespesa(){
+            console.log(JSON.stringify(this.despesaCadastro));
+        },
+        onRowEditSave(event) {
+            console.log(event)
+            //let { newData, index } = event;
+
+            //this.products2[index] = newData;
+        }
     },
     mounted() {
         this.loading = true;

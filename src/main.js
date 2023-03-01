@@ -12,10 +12,11 @@ import Paginator from 'primevue/paginator';
 import InputText from 'primevue/inputtext';
 import Dropdown from 'primevue/dropdown';
 import Calendar from 'primevue/calendar';
-import InputNumber from 'primevue/inputnumber';
 import Fieldset from 'primevue/fieldset';
 import InputMask from 'primevue/inputmask';
-
+import InputNumber from 'primevue/inputnumber';
+import Tooltip from 'primevue/tooltip';
+import FocusTrap from 'primevue/focustrap';
 
 import 'primevue/resources/themes/nano/theme.css';
 import 'primevue/resources/primevue.min.css';
@@ -41,5 +42,7 @@ app.component('Calendar', Calendar);
 app.component('InputNumber', InputNumber);
 app.component('Fieldset', Fieldset);
 app.component('InputMask', InputMask);
+app.directive('tooltip', Tooltip);
+app.directive('focustrap', FocusTrap);
 
 app.mount('#app')
