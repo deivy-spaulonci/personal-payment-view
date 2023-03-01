@@ -15,6 +15,10 @@ import Calendar from 'primevue/calendar';
 import Fieldset from 'primevue/fieldset';
 import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
+import Card from 'primevue/card';
+import Chart from 'primevue/chart';
+import Message from 'primevue/message';
+import InlineMessage from 'primevue/inlinemessage';
 import Tooltip from 'primevue/tooltip';
 import FocusTrap from 'primevue/focustrap';
 
@@ -42,6 +46,10 @@ app.component('Calendar', Calendar);
 app.component('InputNumber', InputNumber);
 app.component('Fieldset', Fieldset);
 app.component('InputMask', InputMask);
+app.component('Card', Card);
+app.component('Chart', Chart);
+app.component('Message', Message);
+app.component('InlineMessage', InlineMessage);
 app.directive('tooltip', Tooltip);
 app.directive('focustrap', FocusTrap);
 

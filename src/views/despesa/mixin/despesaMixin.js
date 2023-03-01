@@ -25,7 +25,7 @@ export default {
                 id:null,
                 tipoDespesa: null,
                 data:null,
-                forenecedor: null,
+                fornecedor: null,
                 formaPagamento:null,
                 valor:null,
                 obs:null
@@ -88,14 +88,24 @@ export default {
             this.idFilter = event.value;
             this.getDataDespesa();
         },
-        cadastroDespesa(){
-            console.log(JSON.stringify(this.despesaCadastro));
-        },
-        onRowEditSave(event) {
-            console.log(event)
-            //let { newData, index } = event;
+        async cadastroDespesa(){
+            this.despesaCadastro.data = this.util.formatData(this.despesaCadastro.data);
+            this.despesaCadastro.valor = this.despesaCadastro.valor.replaceAll('.','').replaceAll(',', '.');
 
-            //this.products2[index] = newData;
+            let result = await this.defaultService.post('despesa',this.despesaCadastro);
+            console.log(result);
+        },
+        async onRowEditSave(event) {
+            this.loading = true;
+            let { newData, index } = event;
+            console.log(index)
+            // this.products2[index] = newData;
+            if(newData.data.toString().indexOf('-') == -1){//foi alterado
+                newData.data = this.util.formatData(newData.data);
+            }
+            let result = await this.defaultService.post('despesa',newData);
+            console.log(result);
+            this.getDataDespesa();
         }
     },
     mounted() {

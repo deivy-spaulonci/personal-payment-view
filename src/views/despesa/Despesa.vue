@@ -4,7 +4,7 @@
       <div class="grid">
         <ComboTipo @custom-change="(s) => despesaCadastro.tipoDespesa = s" :valores="tipos" :largura="210" place="Despesa"/>
         <CampoData @custom-change="(s) => despesaCadastro.data = s" place="Data"/>
-        <ComboTipo @custom-change="(s) => despesaCadastro.forenecedor = s" :valores="fornecedores" :largura="250" place="Fornecedor"/>
+        <ComboTipo @custom-change="(s) => despesaCadastro.fornecedor = s" :valores="fornecedores" :largura="250" place="Fornecedor"/>
         <ComboTipo @custom-change="(s) => despesaCadastro.formaPagamento = s" :valores="formasPgto" :largura="250" place="Forma Pgto"/>
         <CampoMoeda @custom-change="(s) => despesaCadastro.valor = s"/>
         <div class="col-fixed" style="width:200px">
@@ -55,12 +55,7 @@
       <template #empty>No customers found.</template>
       <template #loading>Loading despesas data. Please wait.</template>
 
-
-      <Column field="id" header="Id" :sortable="true" class="columnId">
-        <template #editor="{ data, field }">
-          <InputText v-model="data[field]" style="width: 100%;"/>
-        </template>
-      </Column>
+      <Column field="id" header="Id" :sortable="true" class="columnId"></Column>
 
       <Column field="tipoDespesa" header="Despesa" :sortable="true" style="width: 170px;">
         <template #editor="{ data, field }">
@@ -78,7 +73,7 @@
 
       <Column field="data" header="Data" :sortable="true" style="width: 130px;">
         <template #editor="{ data, field }">
-          <Calendar v-model="data[field]"  dateFormat="dd/mm/yy" :showButtonBar="true" />
+          <CampoData @custom-change="(s) => data[field] = s" :defaultValue="util.formatDateBr(data[field])"/>
         </template>
         <template #body="slotProps" >
           <div class="textCenter">{{util.formatDateBr(slotProps.data.data)}}</div>
@@ -115,7 +110,7 @@
 
       <Column field="valor" header="Valor" class="columnCurrency">
         <template #editor="{ data, field }">
-<!--          <CampoMoeda @custom-change="(s) => despesaCadastro.valor = s"/>-->
+          <CampoMoeda @custom-change="(s) => data[field] = s" :defaultValue="util.formatCurrencyBR(data[field])"/>
         </template>
 
         <template #body="slotProps" >
@@ -123,25 +118,22 @@
         </template>
       </Column>
 
-      <Column :rowEditor="true" :styles="{width:'10%', 'min-width':'8rem'}" :bodyStyle="{'text-align':'center'}"></Column>
+      <Column :rowEditor="true" :styles="{width:'10%', 'min-width':'8rem'}" :bodyStyle="{'text-align':'center'}" ></Column>
 
 <!--      <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">-->
 <!--        <template #body>-->
 <!--          <Button type="button" icon="pi pi-pencil" class="p-button-success p-button-sm"></Button>-->
 <!--        </template>-->
 <!--      </Column>-->
-<!--      <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">-->
-<!--        <template #body>-->
-<!--          <Button type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"></Button>-->
-<!--        </template>-->
-<!--      </Column>-->
-
+      <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
+        <template #body>
+          <Button type="button" icon="pi pi-trash" class="p-button-danger p-button-sm"></Button>
+        </template>
+      </Column>
 
       <template #footer>
         <div class="textRight">Total: {{util.formatCurrencyBR(valorTotal)}}</div>
       </template>
-
-
 
     </DataTable>
     <Paginator :rows="rows" :totalRecords="totalLinas" @page="onPage($event)" :rowsPerPageOptions="[10,15,20]">

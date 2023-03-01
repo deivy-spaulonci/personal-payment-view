@@ -9,9 +9,10 @@
 
 <script>
 export default {
+  props:['defaultValue'],
   data() {
     return {
-      selected: null,
+      selected: this.defaultValue,
     }
   },
   methods: {
