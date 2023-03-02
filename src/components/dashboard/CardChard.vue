@@ -11,7 +11,7 @@
     </template>
     <template #content>
       <p>Lorem ipsum dolor sit amet, </p>
-      <Chart type="bar" :data="dados" />
+      <Chart type="bar" :data="dados" :options="horizontalOptions"/>
     </template>
     <template #footer>
       <Button icon="pi pi-check" label="Save" />
@@ -23,6 +23,38 @@
 import Util from "@/util/Util";
 
 export default {
+  data(){
+    return {
+      horizontalOptions: {
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            labels: {
+              color: '#495057'
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: '#495057'
+            },
+            grid: {
+              color: '#ebedef'
+            }
+          },
+          y: {
+            ticks: {
+              color: '#495057'
+            },
+            grid: {
+              color: '#ebedef'
+            }
+          }
+        }
+      }
+    }
+  },
   props: ['titulo','valorTotal','dados','icone'],
   name: "CardChard",
   util:null,

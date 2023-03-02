@@ -6,10 +6,10 @@
   </div>
   <div class="grid">
     <div class="col">
-    <card-chard titulo="Despesas" :dados="basicData" :valorTotal="totalValorDespesas" :icone="'pi pi-fw pi-dollar'"></card-chard>
+    <card-chard titulo="Despesas" :dados="basicDataDespesa" :valorTotal="totalValorDespesas" :icone="'pi pi-fw pi-dollar'"   ></card-chard>
     </div>
     <div class="col">
-    <card-chard titulo="Contas" :dados="basicData" :valorTotal="totalValorContas" :icone="'pi pi-fw pi-credit-card'"></card-chard>
+    <card-chard titulo="Contas" :dados="basicDataConta" :valorTotal="totalValorContas" :icone="'pi pi-fw pi-credit-card'"></card-chard>
     </div>
   </div>
 </template>
@@ -21,23 +21,21 @@ import CardChard from "@/components/dashboard/CardChard.vue";
 export default {
   data() {
     return {
+      dataChartDespesa: [],
       totalValorDespesas: 0,
       totalValorContas: 0,
       basicData: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: [],
         datasets: [
           {
-            label: 'My First dataset',
+            label: 'Tatal por Despesa',
             backgroundColor: '#42A5F5',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          },
-          {
-            label: 'My Second dataset',
-            backgroundColor: '#9CCC65',
-            data: [28, 48, 40, 19, 86, 27, 90]
+            data: []
           }
         ]
-      }
+      },
+      basicDataDespesa:{},
+      basicDataConta:{}
     }
   },
   name: 'HomeView',
@@ -56,6 +54,14 @@ export default {
     async geTotais(){
       this.totalValorDespesas = await this.defaultService.get('despesa/valorTotal');
       this.totalValorContas = await this.defaultService.get('conta/valorTotal');
+
+      this.dataChartDespesa = await this.defaultService.get('despesa/despesaPorTipo');
+
+      this.basicData.labels = this.dataChartDespesa.map((i) => i.tipoDespesa.nome)
+      this.basicData.datasets[0].data = this.dataChartDespesa.map((i) => i.valor)
+      this.basicDataDespesa = this.basicData;
+
+
     }
   }
 }
