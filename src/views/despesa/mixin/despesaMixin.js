@@ -92,8 +92,8 @@ export default {
             this.despesaCadastro.data = this.util.formatData(this.despesaCadastro.data);
             this.despesaCadastro.valor = this.despesaCadastro.valor.replaceAll('.','').replaceAll(',', '.');
 
-            let result = await this.defaultService.post('despesa',this.despesaCadastro);
-            console.log(result);
+            await this.defaultService.post('despesa',this.despesaCadastro);
+            this.getDataDespesa();
         },
         async onRowEditSave(event) {
             this.loading = true;

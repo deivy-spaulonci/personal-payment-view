@@ -19,6 +19,8 @@ import Card from 'primevue/card';
 import Chart from 'primevue/chart';
 import Message from 'primevue/message';
 import InlineMessage from 'primevue/inlinemessage';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
 import Tooltip from 'primevue/tooltip';
 import FocusTrap from 'primevue/focustrap';
 
@@ -50,6 +52,8 @@ app.component('Card', Card);
 app.component('Chart', Chart);
 app.component('Message', Message);
 app.component('InlineMessage', InlineMessage);
+app.component('TabView', TabView);
+app.component('TabPanel', TabPanel);
 app.directive('tooltip', Tooltip);
 app.directive('focustrap', FocusTrap);
 

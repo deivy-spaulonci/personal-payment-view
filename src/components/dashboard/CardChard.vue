@@ -10,11 +10,11 @@
       </Message>
     </template>
     <template #content>
-      <p>Lorem ipsum dolor sit amet, </p>
+      <p>{{subtitulo}}</p>
       <Chart type="bar" :data="dados" :options="horizontalOptions"/>
     </template>
     <template #footer>
-      <Button icon="pi pi-check" label="Save" />
+<!--      <Button icon="pi pi-check" label="Save" />-->
     </template>
   </Card>
 </template>
@@ -55,7 +55,7 @@ export default {
       }
     }
   },
-  props: ['titulo','valorTotal','dados','icone'],
+  props: ['titulo','valorTotal','dados','icone','subtitulo'],
   name: "CardChard",
   util:null,
   created() {
