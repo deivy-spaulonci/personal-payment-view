@@ -18,7 +18,7 @@ export default {
             lazyParams: {},
             totalLinas: 0,
             filters: null,
-            rows: 10,
+            rows: 20,
             data: [],
             valorTotal: 0,
             despesaCadastro: {
@@ -36,7 +36,6 @@ export default {
     util:null,
     methods:{
         async getDataDespesa(){
-            //console.log(JSON.stringify(this.lazyParams));
 
             this.loading = true;
             let url = '';
@@ -70,11 +69,12 @@ export default {
             this.totalLinas =  await res.totalElements;
             this.valorTotal = await this.defaultService.get('despesa/valorTotal?'+url);
 
+            this.loading = false;
+        },
+        async getTipos(){
             this.tipos = await this.defaultService.get('tipo-despesa');
             this.fornecedores = await this.defaultService.get('fornecedor');
             this.formasPgto = await this.defaultService.get('forma-pagamento')
-
-            this.loading = false;
         },
         onSort(event) {
             this.lazyParams = event;
@@ -111,6 +111,7 @@ export default {
     mounted() {
         this.loading = true;
         this.getDataDespesa();
+        this.getTipos();
     },
     created() {
         this.defaultService = new DefaultService();

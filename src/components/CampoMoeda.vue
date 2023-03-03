@@ -1,10 +1,8 @@
 <template>
-  <div class="col-fixed" style="width:130px;">
     <InputText v-model="selected"
                style="width: 100%"
                placeholder="Valor"
                @keyup="handleChange"/>
-  </div>
 </template>
 
 <script>

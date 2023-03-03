@@ -1,17 +1,17 @@
 <template>
-  <div class="col-fixed" :style="'width:'+largura+'px;'">
     <Dropdown :options="valores" optionLabel="nome"
               :placeholder="place"
               autofocus
-              style="width:100%;" :filter="true"
+              style="width:100%;"
+              scrollHeight="400px"
+              :filter="true"
               :show-clear="true" v-model="selected"
               @change="handleChange"/>
-  </div>
 </template>
 
 <script>
 export default {
-  props: ['valores','largura','place'],
+  props: ['valores','place'],
   data() {
     return {
       selected: null,

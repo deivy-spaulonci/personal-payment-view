@@ -21,6 +21,7 @@ import Message from 'primevue/message';
 import InlineMessage from 'primevue/inlinemessage';
 import TabView from 'primevue/tabview';
 import TabPanel from 'primevue/tabpanel';
+import Divider from 'primevue/divider';
 import Tooltip from 'primevue/tooltip';
 import FocusTrap from 'primevue/focustrap';
 
@@ -54,6 +55,7 @@ app.component('Message', Message);
 app.component('InlineMessage', InlineMessage);
 app.component('TabView', TabView);
 app.component('TabPanel', TabPanel);
+app.component('Divider', Divider);
 app.directive('tooltip', Tooltip);
 app.directive('focustrap', FocusTrap);
 
