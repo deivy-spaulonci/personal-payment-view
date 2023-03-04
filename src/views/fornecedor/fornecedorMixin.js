@@ -1,4 +1,5 @@
 import DefaultService from "@/service/DefaultService";
+import Util from "@/util/Util";
 
 
 export default {
@@ -15,7 +16,7 @@ export default {
             rows: 20,
             data: [],
             cidades:[],
-            c:null,
+            cidadesDb:[],
             fornecedorCadastro:{
                 id:null,
                 nome:null,
@@ -45,8 +46,8 @@ export default {
             this.idFilter = event.value;
             this.getDataFornecedor();
         },
-        async getCidades(nome){
-            this.cidades = await this.defaultService.get('cidade?nome='+nome);
+        async getCidades(){
+            this.cidadesDb = await this.defaultService.get('cidade');
         },
         async getDataFornecedor(){
             // if(this.selectedTipoDespesa)
@@ -80,35 +81,55 @@ export default {
             this.loading = false;
         },
         async cadastroFornecedor(){
-            // this.despesaCadastro.data = this.util.formatData(this.despesaCadastro.data);
-            // this.despesaCadastro.valor = this.despesaCadastro.valor.replaceAll('.','').replaceAll(',', '.');
-            //
-            // await this.defaultService.post('despesa',this.despesaCadastro);
-            // this.getDataDespesa();
+            this.fornecedorCadastro.cnpj = this.fornecedorCadastro.cnpj.replace(/[^0-9]+/g, '');
+            this.fornecedorCadastro.cep = this.fornecedorCadastro.cep.replace(/[^0-9]+/g, '');
+            this.fornecedorCadastro.telefone = this.fornecedorCadastro.telefone.replace(/[^0-9]+/g, '');
+
+            await this.defaultService.post('fornecedor',this.fornecedorCadastro);
+            this.getDataFornecedor();
+            this.fornecedorCadastro = {
+                id:null,
+                nome:null,
+                razaoSocial:null,
+                cnpj:null,
+                inscricaoEstadual:null,
+                endereco:null,
+                bairro:null,
+                complemento:null,
+                cep:null,
+                telefone:null,
+                cidade:null,
+            };
         },
         async getCnpj(){
-            // this.fornecedorCadastro.cnpj = this.fornecedorCadastro.cnpj.replace(/\D/g, '');
-            //
-            // let result = await this.defaultService.get('fornecedor/consultacnpj?cnpj='+this.fornecedorCadastro.cnpj);
-            // this.fornecedorCadastro.nome = result.fantasia ? result.fantasia : result.nome;
-            // this.fornecedorCadastro.razaoSocial = result.nome ? result.nome : result.fantasia;
-            // this.fornecedorCadastro.inscricaoEstadual = '';
-            // this.fornecedorCadastro.endereco = result.logradouro + " " + result.numero;
-            // this.fornecedorCadastro.bairro = result.bairro;
-            // this.fornecedorCadastro.complemento = result.complemento;
-            // this.fornecedorCadastro.cep = result.cep;
-            // this.fornecedorCadastro.telefone = result.telefone;
-            // this.getCidades(result.municipio)
+            this.fornecedorCadastro.cnpj = this.fornecedorCadastro.cnpj.replace(/\D/g, '');
 
-            // console.log(JSON.stringify(result))
+            let result = await this.defaultService.get('fornecedor/consultacnpj?cnpj='+this.fornecedorCadastro.cnpj);
+            this.fornecedorCadastro.nome = this.util.capt(result.fantasia ? result.fantasia : result.nome);
+            this.fornecedorCadastro.razaoSocial = this.util.capt(result.nome ? result.nome : result.fantasia);
+            this.fornecedorCadastro.inscricaoEstadual = '';
+            this.fornecedorCadastro.endereco = this.util.capt(result.logradouro + " " + result.numero);
+            this.fornecedorCadastro.bairro = this.util.capt(result.bairro);
+            this.fornecedorCadastro.complemento = this.util.capt(result.complemento);
+            this.fornecedorCadastro.cep = result.cep;
+            this.fornecedorCadastro.telefone = result.telefone;
 
+            this.cidades = this.cidadesDb.filter((e) =>
+                e.nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase()==result.municipio.toLocaleLowerCase()
+            );
+        },
+        async editFornecedor(id){
+            this.fornecedorCadastro = await this.defaultService.get('fornecedor/'+id);
+            this.cidades = this.cidadesDb;
         }
     },
     mounted() {
         this.loading = true;
         this.getDataFornecedor();
+        this.getCidades()
     },
     created() {
         this.defaultService = new DefaultService();
-    }
+        this.util = new Util();
+    },
 }

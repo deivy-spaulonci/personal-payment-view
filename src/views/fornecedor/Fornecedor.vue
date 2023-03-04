@@ -10,7 +10,7 @@
             <Button type="button" icon="pi pi-save" class="p-button-primary p-button-sm" style="width:10%;" @click="getCnpj"></Button>
           </div>
           <div class="field">
-            <InputText type="text" v-model="fornecedorCadastro.nome" placeholder="Nome" style="width: 100%;"/>
+            <InputText type="text" v-model="fornecedorCadastro.nome" :style="{'text-transform':'capitalize'}" placeholder="Nome" style="width: 100%; text-transform: capitalize"/>
           </div>
           <div class="field">
             <InputText type="text" v-model="fornecedorCadastro.razaoSocial" placeholder="Razão Social" style="width: 100%;"/>
@@ -34,7 +34,7 @@
             <InputText type="text" v-model="fornecedorCadastro.telefone" placeholder="Telefone" style="width: 100%;"/>
           </div>
           <div class="field">
-            <Dropdown v-model="selectedEstado" scrollHeight="400px" :options="cidades" optionLabel="nome" placeholder="Cidade" style="width: 100%;" :filter="true" :show-clear="true"/>
+            <Dropdown v-model="fornecedorCadastro.cidade" scrollHeight="400px" :options="cidades" optionLabel="nome" placeholder="Cidade" style="width: 100%;" :filter="true" :show-clear="true"/>
           </div>
           <div class="field">
             <Button type="button" icon="pi pi-save" class="p-button-primary p-button-sm" style="height: 100%; width: 100%;" @click="cadastroFornecedor"></Button>
@@ -76,8 +76,8 @@
           </Column>
 
           <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
-            <template #body>
-              <Button type="button" icon="pi pi-pencil" class="p-button-success p-button-sm"></Button>
+            <template #body="slotProps">
+              <Button type="button" icon="pi pi-pencil" class="p-button-success p-button-sm" @click="editFornecedor(slotProps.data.id)"></Button>
             </template>
           </Column>
 
