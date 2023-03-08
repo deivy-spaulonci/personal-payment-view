@@ -1,8 +1,12 @@
 import DefaultService from "@/service/DefaultService";
 import Util from "@/util/Util";
-
+import {useToast} from "primevue/usetoast";
 
 export default {
+    setup() {
+        const toast = useToast();
+        toast.add({severity:'info', summary: 'Info Message', detail:'Message Content', life: 3000});
+    },
     data() {
         return {
             loading: false,
@@ -36,7 +40,7 @@ export default {
     methods:{
         onSort(event) {
             this.lazyParams = event;
-            this.getDataDespesa();
+            this.getDataFornecedor();
         },
         onPage(event) {
             this.lazyParams = event;
@@ -105,18 +109,22 @@ export default {
             this.fornecedorCadastro.cnpj = this.fornecedorCadastro.cnpj.replace(/\D/g, '');
 
             let result = await this.defaultService.get('fornecedor/consultacnpj?cnpj='+this.fornecedorCadastro.cnpj);
-            this.fornecedorCadastro.nome = this.util.capt(result.fantasia ? result.fantasia : result.nome);
-            this.fornecedorCadastro.razaoSocial = this.util.capt(result.nome ? result.nome : result.fantasia);
-            this.fornecedorCadastro.inscricaoEstadual = '';
-            this.fornecedorCadastro.endereco = this.util.capt(result.logradouro + " " + result.numero);
-            this.fornecedorCadastro.bairro = this.util.capt(result.bairro);
-            this.fornecedorCadastro.complemento = this.util.capt(result.complemento);
-            this.fornecedorCadastro.cep = result.cep;
-            this.fornecedorCadastro.telefone = result.telefone;
+            if(result.status=="ERROR"){
+                this.$toast.add({severity:'error', summary: 'Error Message', detail:result.message, life: 3000});
+            }else{
+                this.fornecedorCadastro.nome = this.util.capt(result.fantasia ? result.fantasia : result.nome);
+                this.fornecedorCadastro.razaoSocial = this.util.capt(result.nome ? result.nome : result.fantasia);
+                this.fornecedorCadastro.inscricaoEstadual = '';
+                this.fornecedorCadastro.endereco = this.util.capt(result.logradouro + " " + result.numero);
+                this.fornecedorCadastro.bairro = this.util.capt(result.bairro);
+                this.fornecedorCadastro.complemento = this.util.capt(result.complemento);
+                this.fornecedorCadastro.cep = result.cep;
+                this.fornecedorCadastro.telefone = result.telefone;
 
-            this.cidades = this.cidadesDb.filter((e) =>
-                e.nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase()==result.municipio.toLocaleLowerCase()
-            );
+                this.cidades = this.cidadesDb.filter((e) =>
+                    e.nome.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase()==result.municipio.toLocaleLowerCase()
+                );
+            }
         },
         async editFornecedor(id){
             this.fornecedorCadastro = await this.defaultService.get('fornecedor/'+id);
